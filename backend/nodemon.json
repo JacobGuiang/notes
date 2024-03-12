@@ -1,3 +1,0 @@
-{
-  "exec": "ts-node -r tsconfig-paths/register --transpile-only ./src/app.ts"
-}
