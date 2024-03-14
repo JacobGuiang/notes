@@ -1,1 +1,25 @@
-{}
+{
+  "name": "notes-app",
+  "version": "1.0.0",
+  "description": "Notes web application",
+  "scripts": {
+    "install:frontend": "npm install --prefix frontend",
+    "install:backend": "npm install --prefix backend",
+    "install": "concurrently \"npm:install:frontend\" \"npm:install:backend\"",
+    "ci:frontend": "npm ci --prefix frontend",
+    "ci:backend": "npm ci --prefix backend",
+    "ci": "concurrently \"npm:ci:frontend\" \"npm:ci:backend\"",
+    "lint:frontend": "npm run lint --prefix frontend",
+    "lint:backend": "npm run lint --prefix backend",
+    "lint": "concurrently \"npm:lint:frontend\" \"npm:lint:backend\"",
+    "test:frontend": "npm run test --prefix frontend",
+    "test:backend": "npm run test --prefix backend",
+    "test": "concurrently \"npm:test:frontend\" \"npm:test:backend\"",
+    "prettier:frontend": "npm run prettier --prefix frontend",
+    "prettier:backend": "npm run prettier --prefix backend",
+    "prettier": "concurrently \"npm:prettier:frontend\" \"npm:prettier:backend\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
