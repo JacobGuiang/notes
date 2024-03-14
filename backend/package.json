@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx src/index.ts | pino-pretty --colorize",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "test": "echo \"no test specified\"",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier:check": "prettier . --check",
-    "prettier:write": "prettier . --write"
+    "prettier": "prettier . --write"
   },
   "author": "",
   "license": "ISC",
