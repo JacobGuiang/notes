@@ -4,13 +4,13 @@
 ARG NODE_VERSION=lts
 FROM node:${NODE_VERSION}-slim as base
 
-LABEL fly_launch_runtime="NodeJS"
+LABEL fly_launch_runtime="Node.js/Prisma"
 
-# NodeJS app lives here
+# Node.js/Prisma app lives here
 WORKDIR /src
 
 # Set production environment
-ENV NODE_ENV=production
+ENV NODE_ENV="production"
 
 
 # Throw-away build stage to reduce size of final image
@@ -18,11 +18,15 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install -y python-is-python3 pkg-config build-essential 
+    apt-get install --no-install-recommends -y build-essential node-gyp openssl pkg-config python-is-python3
 
 # Install node modules
-COPY --link package.json package-lock.json .
-RUN npm install --production=false
+COPY --link package-lock.json package.json ./
+RUN npm ci --include=dev
+
+# Generate Prisma Client
+COPY --link /prisma /prisma
+RUN npx prisma generate
 
 # Copy application code
 COPY --link . .
@@ -31,14 +35,20 @@ COPY --link . .
 RUN npm run build
 
 # Remove development dependencies
-RUN npm prune --production
+RUN npm prune --omit=dev
 
 
 # Final stage for app image
 FROM base
 
+# Install packages needed for deployment
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y openssl && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
 # Copy built application
 COPY --from=build /src /src
 
 # Start the server by default, this can be overwritten at runtime
+EXPOSE 8080
 CMD [ "npm", "run", "start" ]
