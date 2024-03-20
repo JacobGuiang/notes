@@ -9,19 +9,9 @@ defaults:
     working-directory: ./backend
 
 jobs:
-  deploy-database:
+  deploy-backend:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npm install
-      - run: npx prisma migrate deploy
-        env:
-          DATABASE_DIRECT_URL: ${{ secrets.DATABASE_DIRECT_URL }}
-  deploy-nodejs:
-    needs: deploy-database
-    runs-on: ubuntu-latest
-    concurrency: deploy-nodejs # optional: ensure only one action runs at a time
+    concurrency: deploy-backend # optional: ensure only one action runs at a time
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
