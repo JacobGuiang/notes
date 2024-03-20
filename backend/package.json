@@ -9,7 +9,10 @@
     "start": "node src/index.js",
     "test": "echo \"no test specified\"",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier . --write"
+    "prettier": "prettier . --write",
+    "migrate": "knex migrate:latest",
+    "migrate:test": "knex migrate:latest --env test",
+    "migrate:rollback:test": "knex migrate:rollback --all --env test"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +25,7 @@
     "express-rate-limit": "^7.2.0",
     "helmet": "^7.1.0",
     "http-status-codes": "^2.3.0",
+    "pg": "^8.11.3",
     "pino": "^8.19.0",
     "pino-http": "^9.0.0",
     "zod": "^3.22.4"
@@ -37,7 +41,9 @@
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
+    "knex": "^3.1.0",
     "prettier": "3.2.5",
+    "ts-node": "^10.9.2",
     "tsx": "^4.7.1",
     "typescript": "^5.4.2"
   }
