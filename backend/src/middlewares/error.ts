@@ -1,7 +1,7 @@
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
-import config from '../config/config';
-import logger from '../config/logger';
-import ApiError from '../utils/ApiError';
+import config from '@/config/config';
+import logger from '@/config/logger';
+import ApiError from '@/utils/ApiError';
 import { ErrorRequestHandler } from 'express';
 
 const errorConverter: ErrorRequestHandler = (err, _req, _res, next) => {
