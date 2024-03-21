@@ -6,7 +6,7 @@ const router = express.Router();
 
 const defaultRoutes = [
   {
-    path: '/users',
+    path: '/user',
     router: userRouter,
   },
 ];
