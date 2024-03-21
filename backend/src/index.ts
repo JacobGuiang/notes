@@ -1,15 +1,15 @@
 import app from './app';
 import config from './config/config';
 import logger from './config/logger';
-import postgres from './config/postgres';
+import db from './config/db';
 
 const server = app.listen(config.port, () => {
   logger.info(`Listening to port ${config.port}`);
 });
 
 const exitHandler = async () => {
-  if (postgres) {
-    await postgres.end();
+  if (db) {
+    await db.destroy();
     logger.info('Postgres pool closed');
   }
   if (server) {
@@ -33,8 +33,8 @@ process.on('SIGINT', exitHandler);
 
 process.on('SIGTERM', async () => {
   logger.info('SIGTERM received');
-  if (postgres) {
-    await postgres.end();
+  if (db) {
+    await db.destroy();
     logger.info('Postgres pool closed');
   }
   if (server) {
