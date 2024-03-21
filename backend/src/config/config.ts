@@ -7,7 +7,10 @@ dotenv.config({ path: path.join(__dirname, '../../.env') });
 const envVarsSchema = z
   .object({
     NODE_ENV: z.enum(['production', 'development', 'test']),
-    PORT: z.number().int().safe().or(z.string()).pipe(z.coerce.number()),
+    PORT: z
+      .number()
+      .or(z.string())
+      .pipe(z.coerce.number().positive().int().default(8080)),
     DATABASE_URL: z.string(),
     DATABASE_TEST_URL: z.string(),
   })
@@ -29,7 +32,7 @@ const envVars = result.data;
 
 export default {
   env: envVars.NODE_ENV,
-  port: envVars.PORT || 8080,
+  port: envVars.PORT,
   postgres: {
     url:
       envVars.NODE_ENV !== 'test'
