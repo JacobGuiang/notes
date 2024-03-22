@@ -1,7 +1,7 @@
 import db from '@/config/db';
 import bcrypt from 'bcryptjs';
 import { faker } from '@faker-js/faker';
-import { User } from '@/types/db';
+import { NewUser } from '@/types/db';
 
 const password = 'Password1!';
 const salt = bcrypt.genSaltSync(8);
@@ -17,10 +17,15 @@ const userTwo = {
   password,
 };
 
-const insertUsers = async (users: User[]) => {
+const insertUsers = async (newUsers: NewUser[]) => {
   await db
     .insertInto('user')
-    .values(users.map((user) => ({ ...user, password: hashedPassword })))
+    .values(
+      newUsers.map((newUser) => ({
+        username: newUser.username.toLowerCase(),
+        password: hashedPassword,
+      }))
+    )
     .execute();
 };
 
