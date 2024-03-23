@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "echo \"no test specified\"",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier . --write"
+    "prettier:write": "prettier . --write",
+    "prettier:check": "prettier . --check"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.26.3",
