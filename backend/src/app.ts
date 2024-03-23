@@ -1,12 +1,15 @@
 import config from './config/config';
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
 import pino from 'pino-http';
 import helmet from 'helmet';
 import cors from 'cors';
 import mongoSanitize from 'express-mongo-sanitize';
 import compression from 'compression';
 import authLimiter from './middlewares/rateLimiter';
-import httpStatus from 'http-status';
+import { StatusCodes, getReasonPhrase } from 'http-status-codes';
+import ApiError from './utils/ApiError';
+import { errorConverter, errorHandler } from './middlewares/error';
+import routes from './routes';
 
 const app = express();
 
@@ -38,22 +41,20 @@ if (config.env === 'production') {
   app.use('/auth', authLimiter);
 }
 
-app.get('/status', (_req, res) => {
-  res.status(200).end();
-});
-
-app.head('/status', (_req, res) => {
-  res.status(200).end();
-});
+// api routes
+app.use('/', routes);
 
 // send back a 404 error for any unknown api request
-app.use((_req, res) => {
-  res.status(httpStatus.NOT_FOUND).json({ error: 'Not Found' });
+app.use((_req, _res, next) => {
+  next(
+    new ApiError(StatusCodes.NOT_FOUND, getReasonPhrase(StatusCodes.NOT_FOUND))
+  );
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
-});
+// convert error to ApiError, if needed
+app.use(errorConverter);
+
+// handle error
+app.use(errorHandler);
 
 export default app;

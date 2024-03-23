@@ -10,6 +10,8 @@ defaults:
 
 jobs:
   deploy-backend:
+    environment:
+      name: deploy-backend
     runs-on: ubuntu-latest
     concurrency: deploy-backend # optional: ensure only one action runs at a time
     steps:
