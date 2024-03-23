@@ -7,13 +7,14 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(validate(userValidation.createUser), userController.createUser)
-  .get(userController.getUsers);
+  .post(validate(userValidation.createUser), userController.createUser);
 
-router
-  .route('/:userId')
-  .get(validate(userValidation.getUser), userController.getUser)
-  .patch(validate(userValidation.updateUser), userController.updateUser)
-  .delete(validate(userValidation.deleteUser), userController.deleteUser);
+// TODO
+// NEED AUTH FIRST
+// router
+//   .route('/me')
+//   .get(auth, validate(userValidation.getUser), userController.getUser)
+//   .patch(auth, validate(userValidation.updateUser), userController.updateUser)
+//   .delete(auth, validate(userValidation.deleteUser), userController.deleteUser);
 
 export default router;
