@@ -15,9 +15,12 @@
     "test:frontend": "npm run test --prefix frontend",
     "test:backend": "npm run test --prefix backend",
     "test": "concurrently \"npm:test:frontend\" \"npm:test:backend\"",
-    "prettier:frontend": "npm run prettier --prefix frontend",
-    "prettier:backend": "npm run prettier --prefix backend",
-    "prettier": "concurrently \"npm:prettier:frontend\" \"npm:prettier:backend\""
+    "prettier:write:frontend": "npm run prettier:write --prefix frontend",
+    "prettier:write:backend": "npm run prettier:write --prefix backend",
+    "prettier:write": "concurrently \"npm:prettier:frontend\" \"npm:prettier:backend\"",
+    "prettier:check:frontend": "npm run prettier:check --prefix frontend",
+    "prettier:check:backend": "npm run prettier:check --prefix backend",
+    "prettier:check": "concurrently \"npm:prettier:check:frontend\" \"npm:prettier:check:backend\""
   },
   "dependencies": {
     "concurrently": "^8.2.2"

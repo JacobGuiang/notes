@@ -3,3 +3,10 @@ Dockerfile
 .dockerignore
 node_modules
 .git
+.env
+tests
+jest.config.ts
+.eslintignore
+.eslintrc.js
+.prettierignore
+.prettierrc

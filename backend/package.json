@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx src/index.ts | pino-pretty --colorize",
-    "build": "tsc",
-    "start": "node src/index.js",
+    "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "start": "node dist/index.js",
     "test": "cross-env NODE_ENV=test jest -i --colors --verbose --detectOpenHandles",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "prettier": "prettier . --write",
+    "prettier:write": "prettier . --write",
+    "prettier:check": "prettier . --check",
     "migrate": "knex migrate:latest",
+    "migrate:rollback": "knex migrate:rollback --all",
     "migrate:test": "knex migrate:latest --env test",
     "migrate:rollback:test": "knex migrate:rollback --all --env test"
   },
@@ -54,7 +56,7 @@
     "prettier": "3.2.5",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.8",
     "tsx": "^4.7.1",
     "typescript": "^5.4.2"
   }
