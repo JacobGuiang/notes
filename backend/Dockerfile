@@ -7,7 +7,7 @@ FROM node:${NODE_VERSION}-slim as base
 LABEL fly_launch_runtime="NodeJS"
 
 # NodeJS app lives here
-WORKDIR /src
+WORKDIR /app
 
 # Set production environment
 ENV NODE_ENV=production
@@ -30,9 +30,6 @@ COPY --link . .
 # Build application
 RUN npm run build
 
-# Migrate database
-RUN npm run migrate
-
 # Remove development dependencies
 RUN npm prune --production
 
@@ -41,7 +38,7 @@ RUN npm prune --production
 FROM base
 
 # Copy built application
-COPY --from=build /src /src
+COPY --from=build /app /app
 
 # Start the server by default, this can be overwritten at runtime
 CMD [ "npm", "run", "start" ]

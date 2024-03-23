@@ -1,8 +1,7 @@
 name: deploy backend
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 defaults:
   run:
