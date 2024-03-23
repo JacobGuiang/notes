@@ -28,7 +28,7 @@ jobs:
   # Single deploy job since we're just deploying
   deploy-frontend:
     environment:
-      name: github-pages
+      name: deploy-frontend
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
