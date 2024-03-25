@@ -10,6 +10,7 @@ const envVarsSchema = z
     PORT: z.number().or(z.string()).pipe(z.coerce.number().positive().int()),
     DATABASE_URL: z.string(),
     DATABASE_TEST_URL: z.string(),
+    JWT_SECRET: z.string(),
   })
   .partial();
 
@@ -17,6 +18,7 @@ const requiredEnvVarsSchema = envVarsSchema.required({
   NODE_ENV: true,
   DATABASE_URL: true,
   DATABASE_TEST_URL: true,
+  JWT_SECRET: true,
 });
 
 const result = requiredEnvVarsSchema.safeParse(process.env);
@@ -36,4 +38,5 @@ export default {
         ? envVars.DATABASE_URL
         : envVars.DATABASE_TEST_URL,
   },
+  jwtSecret: envVars.JWT_SECRET,
 };
