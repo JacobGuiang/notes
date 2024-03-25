@@ -1,6 +1,5 @@
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
-import config from '@/config/config';
-import logger from '@/config/logger';
+import { config, logger } from '@/config';
 import ApiError from '@/utils/ApiError';
 import { ErrorRequestHandler } from 'express';
 

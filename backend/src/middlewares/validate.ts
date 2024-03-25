@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import httpStatus from 'http-status-codes';
-import pick from '@/utils/pick';
-import ApiError from '@/utils/ApiError';
+import { ApiError, pick } from '@/utils';
 import { Request, Response, NextFunction } from 'express';
 
 const validate =
@@ -17,7 +16,7 @@ const validate =
       return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
     }
     Object.assign(req, result.data);
-    return next();
+    next();
   };
 
 export default validate;
