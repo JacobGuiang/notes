@@ -8,6 +8,13 @@ import { rateLimiter, errorConverter, errorHandler } from './middlewares';
 import { StatusCodes, getReasonPhrase } from 'http-status-codes';
 import ApiError from './utils/ApiError';
 import routes from './routes';
+import cookieParser from 'cookie-parser';
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: { userId: number };
+  }
+}
 
 const app = express();
 
@@ -30,6 +37,8 @@ app.use(compression());
 // enable cors
 app.use(cors());
 app.options('*', cors());
+
+app.use(cookieParser(config.cookieSecret));
 
 // limit repeated failed requests to auth endpoints
 if (config.env === 'production') {

@@ -16,7 +16,7 @@ const validate =
       return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
     }
     Object.assign(req, result.data);
-    return next();
+    next();
   };
 
 export default validate;
