@@ -7,12 +7,10 @@ import { Request, Response, NextFunction } from 'express';
 const auth = (req: Request, res: Response, next: NextFunction) => {
   const token = req.signedCookies.token;
   if (!token) {
-    res.clearCookie('token');
     throw new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate');
   }
   jwt.verify(token as string, config.jwtSecret, (err, decoded) => {
     if (err) {
-      res.clearCookie('token');
       throw new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate');
     }
     const { user } = decoded as JwtPayload;
