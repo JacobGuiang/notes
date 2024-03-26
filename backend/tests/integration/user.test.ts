@@ -5,7 +5,6 @@ import app from '@/app';
 import setupTestDB from '../utils/setupTestDb';
 import { userOne, insertUsers } from '../fixtures/user.fixture';
 import { NewUser } from '@/types/db';
-import db from '@/config/db';
 
 setupTestDB();
 
@@ -115,39 +114,43 @@ describe('User routes', () => {
     });
   });
 
-  // describe('GET /user', () => {
-  //   test('should return 200', async () => {
-  //     await insertUsers([userOne, userTwo]);
+  describe('GET /users/me', () => {
+    test('should return 200 if authenticated', async () => {
+      insertUsers([userOne]);
+      const credentials = {
+        username: userOne.username,
+        password: userOne.password,
+      };
 
-  //     const res = await request(app).get('/users').send().expect(StatusCodes.OK);
+      const loginRes = await request(app)
+        .post('/auth/login')
+        .send(credentials)
+        .expect(StatusCodes.OK);
+      const cookie = loginRes.headers['Set-Cookie'];
 
-  //     expect(res.body).toEqual(expect.any(Array));
-  //     expect(res.body).toHaveLength(2);
-  //     expect(res.body[0].username).toBe(userOne.username.toLowerCase());
-  //   });
-  // });
+      const userRes = await request(app)
+        .get('/users/me')
+        .set('Cookie', cookie)
+        .expect(200);
 
-  // describe('GET /user/:userId', () => {
-  //   test('should return 200 and the user object if data is ok', async () => {
-  //     await insertUsers([userOne]);
+      expect(userRes.body).not.toHaveProperty('password');
+      expect(userRes.body).toEqual({
+        id: expect.anything(),
+        username: userOne.username.toLowerCase(),
+      });
+    });
 
-  //     const dbUserOne = await db
-  //       .selectFrom('user')
-  //       .select('id')
-  //       .where('username', '=', userOne.username.toLowerCase())
-  //       .executeTakeFirstOrThrow();
-  //     const userOneId = dbUserOne.id;
+    test('should return 401 error if not authenticated', async () => {
+      const res = await request(app)
+        .get('/users/me')
+        .expect(StatusCodes.UNAUTHORIZED);
 
-  //     const res = await request(app)
-  //       .get(`/user/${userOneId}`)
-  //       .send()
-  //       .expect(StatusCodes.OK);
+      expect(res.body).toEqual({
+        code: StatusCodes.UNAUTHORIZED,
+        message: 'Please authenticate',
+      });
 
-  //     expect(res.body).not.toHaveProperty('password');
-  //     expect(res.body).toEqual({
-  //       id: expect.anything(),
-  //       username: userOne.username.toLowerCase(),
-  //     });
-  //   });
-  // });
+      expect(res.get('Set-Cookie')).toBeUndefined();
+    });
+  });
 });
