@@ -7,14 +7,14 @@ import config from '@/config/config';
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const user = await userService.createUser(req.body);
-  res.status(StatusCodes.CREATED).send({ user });
+  res.status(StatusCodes.CREATED).send(user);
 });
 
 const login = catchAsync(async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const user = await authService.login(username, password);
   const token = jwt.sign(
-    { user: { userId: user.id, username: user.username } },
+    { user: { id: user.id, username: user.username } },
     config.jwtSecret,
     {
       expiresIn: '1h',
