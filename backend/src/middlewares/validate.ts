@@ -11,7 +11,7 @@ const validate =
 
     if (!result.success) {
       const errorMessage = result.error.issues
-        .map((issue) => issue.message)
+        .map((issue) => `${issue.path[1]} ${issue.message}`)
         .join(', ');
       return next(new ApiError(httpStatus.BAD_REQUEST, errorMessage));
     }

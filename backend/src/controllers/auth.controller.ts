@@ -13,9 +13,13 @@ const register = catchAsync(async (req: Request, res: Response) => {
 const login = catchAsync(async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const user = await authService.login(username, password);
-  const token = jwt.sign({ userId: user.id }, config.jwtSecret, {
-    expiresIn: '1d',
-  });
+  const token = jwt.sign(
+    { user: { userId: user.id, username: user.username } },
+    config.jwtSecret,
+    {
+      expiresIn: '1h',
+    }
+  );
   res.cookie('token', token, { httpOnly: true, signed: true, secure: true });
   res.send(user);
 });
