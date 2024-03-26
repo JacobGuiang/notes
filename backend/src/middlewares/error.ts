@@ -3,19 +3,20 @@ import { config, logger } from '@/config';
 import ApiError from '@/utils/ApiError';
 import { ErrorRequestHandler } from 'express';
 
-const errorConverter: ErrorRequestHandler = (err, _req, _res, next) => {
+const errorConverter: ErrorRequestHandler = (err, _req, res, next) => {
   let error = err;
   if (!(error instanceof ApiError)) {
-    // const statusCode =
-    //   error.statusCode || error instanceof mongoose.Error
-    //     ? StatusCodes.BAD_REQUEST
-    //     : StatusCodes.INTERNAL_SERVER_ERROR;
     const statusCode = error.statusCode
       ? StatusCodes.BAD_REQUEST
       : StatusCodes.INTERNAL_SERVER_ERROR;
     const message = error.message || getReasonPhrase(statusCode);
     error = new ApiError(statusCode, message, false, err.stack);
   }
+
+  if (error.statusCode === StatusCodes.UNAUTHORIZED) {
+    res.clearCookie('token');
+  }
+
   next(error);
 };
 
