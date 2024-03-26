@@ -12,7 +12,7 @@ import cookieParser from 'cookie-parser';
 
 declare module 'express-serve-static-core' {
   interface Request {
-    user?: { userId: number };
+    user?: { userId: number; username: string };
   }
 }
 

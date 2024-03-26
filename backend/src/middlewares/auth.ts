@@ -1,25 +1,22 @@
 import config from '@/config/config';
 import { ApiError } from '@/utils';
 import { StatusCodes } from 'http-status-codes';
-import jwt from 'jsonwebtoken';
-import cookieParser from 'cookie-parser';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
-interface IDecoded {
-  userId: number;
-}
-
 const auth = (req: Request, res: Response, next: NextFunction) => {
-  const token = cookieParser.signedCookie('token', config.cookieSecret);
+  const token = req.signedCookies.token;
   if (!token) {
+    res.clearCookie('token');
     throw new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate');
   }
-  jwt.verify(token, config.jwtSecret, (err, decoded) => {
+  jwt.verify(token as string, config.jwtSecret, (err, decoded) => {
     if (err) {
       res.clearCookie('token');
       throw new ApiError(StatusCodes.UNAUTHORIZED, 'Please authenticate');
     }
-    req.user = decoded as IDecoded;
+    const { user } = decoded as JwtPayload;
+    req.user = user;
   });
   next();
 };
