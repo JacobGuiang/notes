@@ -5,6 +5,7 @@ import app from '@/app';
 import setupTestDB from '../utils/setupTestDb';
 import { userOne, insertUsers } from '../fixtures/user.fixture';
 import { NewUser } from '@/types/db';
+import db from '@/config/db';
 
 setupTestDB();
 
@@ -126,7 +127,7 @@ describe('User routes', () => {
         .post('/auth/login')
         .send(credentials)
         .expect(StatusCodes.OK);
-      const cookie = loginRes.headers['Set-Cookie'];
+      const cookie = loginRes.headers['set-cookie'];
 
       const userRes = await request(app)
         .get('/users/me')
@@ -150,7 +151,9 @@ describe('User routes', () => {
         message: 'Please authenticate',
       });
 
-      expect(res.get('Set-Cookie')).toBeUndefined();
+      // expect token cookie to be cleared
+      const tokenCookie = res.headers['set-cookie'][0];
+      expect(tokenCookie.startsWith('token=;')).toBe(true);
     });
   });
 });

@@ -153,7 +153,9 @@ describe('Auth routes', () => {
         message: 'Incorrect username or password',
       });
 
-      expect(res.get('Set-Cookie')).toBeUndefined();
+      // expect token cookie to be cleared
+      const tokenCookie = res.headers['set-cookie'][0];
+      expect(tokenCookie.startsWith('token=;')).toBe(true);
     });
 
     test('should return 401 error if password is wrong', async () => {
@@ -172,7 +174,9 @@ describe('Auth routes', () => {
         message: 'Incorrect username or password',
       });
 
-      expect(res.get('Set-Cookie')).toBeUndefined();
+      // expect token cookie to be cleared
+      const tokenCookie = res.headers['set-cookie'][0];
+      expect(tokenCookie.startsWith('token=;')).toBe(true);
     });
   });
 
@@ -187,14 +191,18 @@ describe('Auth routes', () => {
       const loginRes = await request(app)
         .post('/auth/login')
         .send(loginCredentials);
-      const cookie = loginRes.headers['set-cookies'];
+      const cookie = loginRes.headers['set-cookie'];
 
       const logoutRes = await request(app)
         .post('/auth/logout')
         .set('Cookie', cookie)
         .expect(StatusCodes.NO_CONTENT);
 
-      expect(logoutRes.headers['set-cookies'][0]).not.toEqual(cookie);
+      // expect token cookie to be cleared after logout
+      expect(logoutRes.headers['set-cookie'][0]).not.toEqual(cookie[0]);
+      expect(logoutRes.headers['set-cookie'][0].startsWith('token=')).toBe(
+        true
+      );
     });
   });
 });
