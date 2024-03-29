@@ -10,6 +10,10 @@ import db from '@/config/db';
 setupTestDB();
 
 describe('User routes', () => {
+  beforeEach(async () => {
+    await db.deleteFrom('user').execute();
+  });
+
   describe('POST /users', () => {
     let newUser: NewUser;
 
@@ -117,7 +121,7 @@ describe('User routes', () => {
 
   describe('GET /users/me', () => {
     test('should return 200 if authenticated', async () => {
-      insertUsers([userOne]);
+      await insertUsers([userOne]);
       const credentials = {
         username: userOne.username,
         password: userOne.password,

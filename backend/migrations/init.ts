@@ -16,10 +16,7 @@ export async function up(knex: Knex): Promise<void> {
         .inTable('user')
         .onDelete('cascade');
       table.text('content').notNullable();
-      table
-        .timestamp('updated_at', { precision: 0 })
-        .defaultTo(knex.fn.now())
-        .notNullable();
+      table.timestamp('updated_at').defaultTo(knex.fn.now()).notNullable();
     });
 }
 

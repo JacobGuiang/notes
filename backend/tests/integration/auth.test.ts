@@ -10,6 +10,10 @@ import { userOne, insertUsers } from '../fixtures/user.fixture';
 setupTestDB();
 
 describe('Auth routes', () => {
+  beforeEach(async () => {
+    await db.deleteFrom('user').execute();
+  });
+
   describe('POST /auth/register', () => {
     let newUser: NewUser;
     beforeEach(() => {
