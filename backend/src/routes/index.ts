@@ -1,6 +1,7 @@
 import express from 'express';
 import authRouter from './auth.route';
 import userRouter from './user.route';
+import noteRouter from './note.route';
 import { StatusCodes } from 'http-status-codes';
 
 const router = express.Router();
@@ -13,6 +14,10 @@ const defaultRoutes = [
   {
     path: '/users',
     router: userRouter,
+  },
+  {
+    path: '/users/me/notes',
+    router: noteRouter,
   },
 ];
 
