@@ -2,14 +2,14 @@ import type { Knex } from 'knex';
 import 'dotenv/config';
 
 const config: { [key: string]: Knex.Config } = {
-  development: {
+  production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
   },
 
-  production: {
+  development: {
     client: 'pg',
-    connection: process.env.DATABASE_URL,
+    connection: process.env.DATABASE_TEST_URL,
   },
 
   test: {

@@ -11,8 +11,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier:write": "prettier . --write",
     "prettier:check": "prettier . --check",
-    "migrate": "knex migrate:latest",
-    "migrate:rollback": "knex migrate:rollback --all",
+    "migrate": "knex migrate:latest --env production",
+    "migrate:rollback": "knex migrate:rollback --all --env production",
     "migrate:test": "knex migrate:latest --env test",
     "migrate:rollback:test": "knex migrate:rollback --all --env test"
   },
