@@ -12,7 +12,7 @@ const login = async (username: string, password: string) => {
   if (!user || !(await bcrypt.compare(password, user.password))) {
     throw new ApiError(
       StatusCodes.UNAUTHORIZED,
-      'Incorrect username or password'
+      'incorrect username or password'
     );
   }
   return { id: user.id, username: user.username };

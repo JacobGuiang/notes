@@ -6,5 +6,6 @@ const login = z.object({
     password: z.string(),
   }),
 });
+export type LoginBody = z.infer<typeof login.shape.body>;
 
 export default { login };
