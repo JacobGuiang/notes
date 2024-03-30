@@ -26,12 +26,12 @@ describe('Note routes', () => {
       password: userOne.password,
     };
 
-    const loginRes = await request(app)
+    const res = await request(app)
       .post('/auth/login')
       .send(credentials)
       .expect(StatusCodes.OK);
-    cookie = loginRes.headers['set-cookie'];
-    userId = loginRes.body.id;
+    cookie = res.headers['set-cookie'];
+    userId = res.body.id;
   });
 
   beforeEach(async () => {
@@ -75,10 +75,9 @@ describe('Note routes', () => {
         .send(newNote)
         .expect(StatusCodes.UNAUTHORIZED);
 
-      expect(res.body).toEqual({
-        code: StatusCodes.UNAUTHORIZED,
-        message: 'Please authenticate',
-      });
+      // expect token cookie to be cleared
+      const tokenCookie = res.headers['set-cookie'][0];
+      expect(tokenCookie.startsWith('token=;')).toBe(true);
     });
   });
 
@@ -105,9 +104,126 @@ describe('Note routes', () => {
         .get('/users/me/notes')
         .expect(StatusCodes.UNAUTHORIZED);
 
-      expect(res.body).toEqual({
-        code: StatusCodes.UNAUTHORIZED,
-        message: 'Please authenticate',
+      // expect token cookie to be cleared
+      const tokenCookie = res.headers['set-cookie'][0];
+      expect(tokenCookie.startsWith('token=;')).toBe(true);
+    });
+  });
+
+  describe('', () => {
+    let noteId: number;
+
+    beforeEach(async () => {
+      await insertNotes([noteOne], userId);
+
+      const dbNote = await db
+        .selectFrom('note')
+        .select('id')
+        .where('content', '=', noteOne.content)
+        .executeTakeFirstOrThrow();
+      noteId = dbNote.id;
+    });
+
+    describe('GET /users/me/notes/:noteId', () => {
+      test('should return 200', async () => {
+        const dbNote = await db
+          .selectFrom('note')
+          .selectAll()
+          .where('id', '=', noteId)
+          .executeTakeFirstOrThrow();
+
+        const res = await request(app)
+          .get(`/users/me/notes/${noteId}`)
+          .set('Cookie', cookie)
+          .expect(StatusCodes.OK);
+
+        expect(JSON.stringify(dbNote)).toEqual(JSON.stringify(res.body));
+      });
+
+      test('should return 401 error if not authenticated', async () => {
+        const res = await request(app)
+          .get(`/users/me/notes/${noteId}`)
+          .expect(StatusCodes.UNAUTHORIZED);
+
+        // expect token cookie to be cleared
+        const tokenCookie = res.headers['set-cookie'][0];
+        expect(tokenCookie.startsWith('token=;')).toBe(true);
+      });
+    });
+
+    describe('PATCH /users/me/notes/:noteId', () => {
+      test('should return 200 and successfully update note if authenticated', async () => {
+        const noteUpdate = {
+          content: faker.string.alphanumeric(8),
+        };
+
+        const res = await request(app)
+          .patch(`/users/me/notes/${noteId}`)
+          .send(noteUpdate)
+          .set('Cookie', cookie);
+
+        const dbNote = await db
+          .selectFrom('note')
+          .selectAll()
+          .where('id', '=', noteId)
+          .executeTakeFirstOrThrow();
+
+        expect(JSON.stringify(dbNote)).toEqual(JSON.stringify(res.body));
+      });
+
+      test('should return 401 error if not authenticated', async () => {
+        const noteUpdate = {
+          content: faker.string.alphanumeric(8),
+        };
+
+        const res = await request(app)
+          .patch(`/users/me/notes/${noteId}`)
+          .send(noteUpdate)
+          .expect(StatusCodes.UNAUTHORIZED);
+
+        const dbNote = await db
+          .selectFrom('note')
+          .selectAll()
+          .where('id', '=', noteId)
+          .executeTakeFirstOrThrow();
+        expect(dbNote.content).toEqual(noteOne.content);
+
+        // expect token cookie to be cleared
+        const tokenCookie = res.headers['set-cookie'][0];
+        expect(tokenCookie.startsWith('token=;')).toBe(true);
+      });
+    });
+
+    describe('DELETE /users/me/notes/:noteId', () => {
+      test('should return 204 and delete note if authenticated', async () => {
+        await request(app)
+          .delete(`/users/me/notes/${noteId}`)
+          .set('Cookie', cookie)
+          .expect(StatusCodes.NO_CONTENT);
+
+        const dbNote = await db
+          .selectFrom('note')
+          .selectAll()
+          .where('id', '=', noteId)
+          .executeTakeFirst();
+        expect(dbNote).toBeUndefined();
+      });
+
+      test('should return 401 error if not authenticated', async () => {
+        const res = await request(app)
+          .delete(`/users/me/notes/${noteId}`)
+          .expect(StatusCodes.UNAUTHORIZED);
+
+        const dbNote = await db
+          .selectFrom('note')
+          .selectAll()
+          .where('id', '=', noteId)
+          .executeTakeFirst();
+        expect(dbNote).toBeDefined();
+
+        // expect token cookie to be cleared
+        const tokenCookie = res.headers['set-cookie'][0];
+        expect(tokenCookie.startsWith('token=;')).toBe(true);
       });
     });
   });

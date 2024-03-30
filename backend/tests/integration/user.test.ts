@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 import { StatusCodes } from 'http-status-codes';
 import app from '@/app';
 import { setupTestDB, getCookie } from '../utils';
-import { userOne, insertUsers, hashedPassword } from '../fixtures/user.fixture';
+import { userOne, insertUsers } from '../fixtures/user.fixture';
 import { NewUser, User } from '@/types/db';
 import db from '@/config/db';
 

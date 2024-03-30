@@ -29,4 +29,4 @@ const insertUsers = async (newUsers: NewUser[]) => {
     .execute();
 };
 
-export { userOne, userTwo, insertUsers, hashedPassword };
+export { userOne, userTwo, insertUsers };

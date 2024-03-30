@@ -38,7 +38,7 @@ const updateNoteByNoteIdAndUserId = async (
   const note = await getNoteByNoteIdAndUserId(noteId, userId);
 
   if (!note) {
-    throw new ApiError(StatusCodes.NOT_FOUND, 'Note not found');
+    throw new ApiError(StatusCodes.NOT_FOUND, 'note not found');
   }
 
   noteUpdate.updated_at = sql`now()`;
@@ -57,7 +57,7 @@ const deleteNoteByNoteIdAndUserId = async (noteId: number, userId: number) => {
   const note = await getNoteByNoteIdAndUserId(noteId, userId);
 
   if (!note) {
-    throw new ApiError(StatusCodes.NOT_FOUND, 'Note not found');
+    throw new ApiError(StatusCodes.NOT_FOUND, 'note not found');
   }
 
   return db
