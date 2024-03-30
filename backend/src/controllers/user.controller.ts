@@ -12,4 +12,14 @@ const getUser = (req: Request, res: Response) => {
   res.send(req.user);
 };
 
-export default { createUser, getUser };
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+  const user = await userService.updateUserById(req.user!.id, req.body);
+  res.send(user);
+});
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const user = await userService.deleteUserById(req.user!.id);
+  res.status(StatusCodes.NO_CONTENT).send(user);
+});
+
+export default { createUser, getUser, updateUser, deleteUser };

@@ -1,61 +1,36 @@
 import { z } from 'zod';
 import validator from 'validator';
 
+const username = z
+  .string()
+  .refine((val) => validator.isAlphanumeric(val), {
+    message: 'must only contain letters and numbers',
+  })
+  .transform((val) => val.toLowerCase());
+
+const password = z.string().refine((val) => validator.isStrongPassword(val), {
+  message: 'is not strong',
+});
+
 const createUser = z.object({
   body: z.object({
-    username: z
-      .string()
-      .refine((val) => validator.isAlphanumeric(val), {
-        message: 'username must only contain letters and numbers',
-      })
-      .transform((val) => val.toLowerCase()),
-    password: z.string().refine((val) => validator.isStrongPassword(val), {
-      message: 'password is not strong',
-    }),
+    username,
+    password,
   }),
 });
 
-// const getUser = z.object({
-//   params: z
-//     .object({
-//       userId: z
-//         .number()
-//         .or(z.string())
-//         .pipe(z.coerce.number().positive().int()),
-//     })
-//     .partial(),
-// });
+const updateUser = z.object({
+  body: z
+    .object({
+      username,
+      password,
+    })
+    .partial()
+    .refine(
+      ({ username, password }) =>
+        username !== undefined || password !== undefined,
+      { message: 'has no properties' }
+    ),
+});
 
-// const updateUser = z.object({
-//   params: z.object({
-//     userId: z.number().or(z.string()).pipe(z.coerce.number().positive().int()),
-//   }),
-//   body: z
-//     .object({
-//       username: z.string().refine((val) => validator.isAlphanumeric(val), {
-//         message: 'username must only contain letters and numbers',
-//       }),
-//       password: z.string().refine((val) => validator.isStrongPassword(val), {
-//         message: 'password is not strong',
-//       }),
-//     })
-//     .partial()
-//     .refine(
-//       ({ username, password }) =>
-//         username !== undefined || password !== undefined,
-//       { message: 'body has no properties' }
-//     ),
-// });
-
-// const deleteUser = z.object({
-//   params: z
-//     .object({
-//       userId: z
-//         .number()
-//         .or(z.string())
-//         .pipe(z.coerce.number().positive().int()),
-//     })
-//     .partial(),
-// });
-
-export default { createUser };
+export default { createUser, updateUser };
