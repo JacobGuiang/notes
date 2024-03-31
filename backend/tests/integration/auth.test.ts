@@ -1,4 +1,5 @@
-import { setupTestDB, getCookie } from '../utils';
+import setupTestDB from '../utils/setupTestDb';
+import getCookie from '../utils/getCookie';
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
 import app from '@/app';

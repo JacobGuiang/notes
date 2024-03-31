@@ -1,5 +1,6 @@
 import express from 'express';
-import { auth, validate } from '@/middlewares';
+import auth from '@/middlewares/auth';
+import validate from '@/middlewares/validate';
 import noteValidation from '@/validations/note.validation';
 import noteController from '@/controllers/note.controller';
 

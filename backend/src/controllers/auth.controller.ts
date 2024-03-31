@@ -1,6 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '@/utils/catchAsync';
-import { authService, userService } from '@/services';
+import authService from '@/services/auth.service';
+import userService from '@/services/user.service';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '@/config/config';

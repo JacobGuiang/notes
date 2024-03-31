@@ -1,5 +1,5 @@
 import config from '@/config/config';
-import { ApiError } from '@/utils';
+import ApiError from '@/utils/ApiError';
 import { StatusCodes } from 'http-status-codes';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';

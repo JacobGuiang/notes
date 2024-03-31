@@ -1,11 +1,6 @@
 import setupTestDB from '../utils/setupTestDb';
-import {
-  noteOne,
-  noteTwo,
-  insertNotes,
-  userOne,
-  insertUsers,
-} from '../fixtures';
+import { noteOne, noteTwo, insertNotes } from '../fixtures/note.fixture';
+import { userOne, insertUsers } from '../fixtures/user.fixture';
 import app from '@/app';
 import request from 'supertest';
 import { StatusCodes } from 'http-status-codes';
