@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '@/lib/auth';
+import { useUser } from '@/lib/auth';
 
 export const Landing = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const user = useUser();
 
-  if (user) {
-    navigate('/notes');
+  if (user.data) {
+    navigate('/users/me/notes');
   }
 
   return (

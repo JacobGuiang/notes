@@ -1,9 +1,9 @@
-import { useAuth } from '@/lib/auth';
+import { useUser } from '@/lib/auth';
 
 export const Profile = () => {
-  const { user } = useAuth();
+  const user = useUser();
 
-  if (!user) {
+  if (!user.data) {
     return null;
   }
 
