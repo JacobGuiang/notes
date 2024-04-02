@@ -36,7 +36,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
 // enable cors
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://jacobguiang.github.io'],
+    credentials: true,
+  })
+);
 app.options('*', cors());
 
 app.use(cookieParser(config.cookieSecret));
