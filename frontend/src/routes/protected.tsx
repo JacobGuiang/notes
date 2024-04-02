@@ -1,8 +1,7 @@
-import { Navigate } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 
+import { MainLayout } from '@/components/Layout';
 import { lazyImport } from '@/utils/lazyImport';
-
-import { App } from './App';
 
 const { NotesRoutes } = lazyImport(
   () => import('@/features/notes'),
@@ -10,13 +9,21 @@ const { NotesRoutes } = lazyImport(
 );
 const { Profile } = lazyImport(() => import('@/features/users'), 'Profile');
 
+const App = () => {
+  return (
+    <MainLayout>
+      <Outlet />
+    </MainLayout>
+  );
+};
+
 export const protectedRoutes = [
   {
-    path: '/users/me',
+    path: '/users/me/',
     element: <App />,
     children: [
-      { path: '/notes/*', element: <NotesRoutes /> },
-      { path: '/', element: <Profile /> },
+      { path: 'notes/*', element: <NotesRoutes /> },
+      { path: '', element: <Profile /> },
       { path: '*', element: <Navigate to="." /> },
     ],
   },
