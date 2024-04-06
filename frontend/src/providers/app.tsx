@@ -29,20 +29,12 @@ type AppProviderProps = {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <React.Suspense
-      fallback={
-        <div className="flex items-center justify-center w-screen h-screen">
-          <h2>loading...</h2>
-        </div>
-      }
-    >
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <QueryClientProvider client={queryClient}>
-          {/* <Notifications /> */}
-          <Router basename="/notes-app">{children}</Router>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
-      </ErrorBoundary>
-    </React.Suspense>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <QueryClientProvider client={queryClient}>
+        {/* <Notifications /> */}
+        <Router basename="/notes-app">{children}</Router>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
