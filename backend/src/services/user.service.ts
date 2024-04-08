@@ -12,7 +12,7 @@ const createUser = async (user: NewUser) => {
       .where('username', '=', user.username)
       .executeTakeFirst()
   ) {
-    throw new ApiError(StatusCodes.BAD_REQUEST, 'username already taken');
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Username already taken');
   }
 
   user.password = await bcrypt.hash(user.password, 8);
@@ -34,7 +34,7 @@ const updateUserById = async (userId: number, userUpdate: UserUpdate) => {
         .where('username', '=', userUpdate.username)
         .executeTakeFirst()
     ) {
-      throw new ApiError(StatusCodes.BAD_REQUEST, 'username already taken');
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Username already taken');
     }
   }
 
