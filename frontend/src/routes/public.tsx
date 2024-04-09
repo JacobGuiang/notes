@@ -1,4 +1,5 @@
 import { lazyImport } from '@/utils/lazyImport';
+import { Suspense } from 'react';
 
 const { AuthRoutes } = lazyImport(
   () => import('@/features/auth'),
@@ -8,6 +9,10 @@ const { AuthRoutes } = lazyImport(
 export const publicRoutes = [
   {
     path: '/auth/*',
-    element: <AuthRoutes />,
+    element: (
+      <Suspense fallback={null}>
+        <AuthRoutes />
+      </Suspense>
+    ),
   },
 ];
