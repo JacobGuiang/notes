@@ -71,7 +71,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
           )}
         />
         {login.error && (
-          <p className="text-sm font-medium text-destructive">
+          <p className="text-base font-medium text-destructive">
             {isAxiosError(login.error)
               ? login.error?.response?.data.message
               : login.error.message}

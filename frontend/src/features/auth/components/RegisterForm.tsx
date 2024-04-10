@@ -73,7 +73,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
           )}
         />
         {register.error && (
-          <p className="text-sm font-medium text-destructive">
+          <p className="text-base font-medium text-destructive">
             {isAxiosError(register.error)
               ? register.error?.response?.data.message
               : register.error.message}
