@@ -1,6 +1,9 @@
 name: deploy backend
 on:
-  push:
+  # Runs after check is finished
+  workflow_run:
+    workflows: [check]
+    types: [completed]
     branches: [main]
 
   workflow_dispatch:
