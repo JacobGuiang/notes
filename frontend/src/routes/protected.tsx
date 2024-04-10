@@ -9,6 +9,7 @@ const { NotesRoutes } = lazyImport(
 );
 const { Profile } = lazyImport(() => import('@/features/users'), 'Profile');
 
+// eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
   return (
     <MainLayout>
