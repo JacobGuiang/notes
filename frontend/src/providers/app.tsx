@@ -25,9 +25,9 @@ const ErrorFallback = () => {
   );
 };
 
-type AppProviderProps = {
+interface AppProviderProps {
   children: React.ReactNode;
-};
+}
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (

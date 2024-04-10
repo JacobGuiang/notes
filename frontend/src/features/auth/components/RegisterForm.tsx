@@ -16,9 +16,9 @@ import validator from 'validator';
 import { isAxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 
-type RegisterFormProps = {
+interface RegisterFormProps {
   onSuccess: () => void;
-};
+}
 
 export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
   const register = useRegister();

@@ -1,9 +1,9 @@
-export type AuthUser = {
+export interface AuthUser {
   id: number;
   username: string;
-};
+}
 
-export type CredentialsDTO = {
+export interface CredentialsDTO {
   username: string;
   password: string;
-};
+}

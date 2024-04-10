@@ -15,9 +15,9 @@ import { z } from 'zod';
 import { isAxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 
-type LoginFormProps = {
+interface LoginFormProps {
   onSuccess: () => void;
-};
+}
 
 export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   const login = useLogin();

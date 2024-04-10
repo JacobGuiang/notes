@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-type AuthLayoutProps = {
+interface AuthLayoutProps {
   children: React.ReactNode;
-};
+}
 
 export const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
