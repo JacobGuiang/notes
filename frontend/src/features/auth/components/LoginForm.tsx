@@ -6,6 +6,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 
@@ -23,8 +24,8 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   const login = useLogin();
 
   const formSchema = z.object({
-    username: z.string(),
-    password: z.string(),
+    username: z.string().min(1, 'Username is required'),
+    password: z.string().min(1, 'Password is required'),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -34,7 +35,6 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
       password: '',
     },
   });
-  const { dirtyFields } = form.formState;
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     login.mutate(values, { onSuccess: onSuccess });
@@ -55,6 +55,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
               <FormControl>
                 <Input {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -67,21 +68,18 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
               <FormControl>
                 <Input {...field} type="password" />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
         {login.error && (
           <p className="text-base font-medium text-destructive">
-            {isAxiosError(login.error)
-              ? login.error?.response?.data.message
+            {isAxiosError(login.error) && login.error?.response?.data.message
+              ? login.error.response.data.message
               : login.error.message}
           </p>
         )}
-        <Button
-          type="submit"
-          disabled={Object.keys(dirtyFields).length < 2 || login.isPending}
-          className="w-full"
-        >
+        <Button type="submit" disabled={login.isPending} className="w-full">
           {login.isPending ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
