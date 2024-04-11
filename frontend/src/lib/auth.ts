@@ -20,9 +20,9 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (credentials: CredentialsDTO) => login(credentials),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries();
-      queryClient.setQueryData(['user'], data);
+    onSuccess: (user) => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      queryClient.setQueryData(['user'], user);
     },
   });
 };
@@ -33,7 +33,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
       queryClient.setQueryData(['user'], undefined);
       window.location.assign(`${window.location.origin}/notes-app/`);
     },
@@ -45,9 +45,10 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: (credentials: CredentialsDTO) => register(credentials),
-    onSuccess: (data) => {
-      queryClient.invalidateQueries();
-      queryClient.setQueryData(['user'], data);
+    onSuccess: async (user, credentials) => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      await login(credentials);
+      queryClient.setQueryData(['user'], user);
     },
   });
 };
