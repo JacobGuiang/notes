@@ -38,7 +38,7 @@ app.use(compression());
 // enable cors
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://jacobguiang.github.io'],
+    origin: ['https://jacobguiang.github.io'],
     credentials: true,
   })
 );
