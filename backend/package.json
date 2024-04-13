@@ -7,6 +7,7 @@
     "dev": "cross-env NODE_ENV=development tsx src/index.ts | pino-pretty --colorize",
     "build": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
     "start": "node dist/index.js",
+    "start:test": "cross-env NODE_ENV=test node dist/index.js",
     "test": "cross-env NODE_ENV=test jest -i --colors --verbose --detectOpenHandles",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier:write": "prettier . --write",
