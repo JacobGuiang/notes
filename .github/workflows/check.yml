@@ -6,6 +6,7 @@ on:
   push:
     branches: [main]
 
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
@@ -13,18 +14,45 @@ jobs:
     environment:
       name: check
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_TEST_URL: ${{ secrets.DATABASE_TEST_URL }}
+      COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
     steps:
       - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 20.12.2
+          cache: 'npm'
       - run: npm ci
-      - run: npm run lint
-      - run: npm test
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          DATABASE_TEST_URL: ${{ secrets.DATABASE_TEST_URL }}
-          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      - run: npm run prettier:check
+      - name: Lint
+        run: npm run lint
+      - name: Format
+        run: npm run prettier:check
+      - name: Test
+        run: npm test
+      - name: Build for E2E test
+        run: npm run build:test
+      - name: Start backend in the background for E2E test
+        run: npm run start:test --prefix backend &
+      - name: Start frontend in the background for E2E test
+        run: npm run preview --prefix frontend &
+      - name: E2E test
+        uses: cypress-io/github-action@v6
+        with:
+          wait-on: 'http://localhost:8080, http://localhost:3000'
+          working-directory: frontend
+      # after the test run completes store videos and any screenshots
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: ./frontend/cypress/screenshots
+          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos
+          path: ./frontend/cypress/screenshots
+          if-no-files-found: ignore # 'warn' or 'error' are also available, defaults to `warn`
