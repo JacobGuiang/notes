@@ -1,15 +1,28 @@
-import { useUser } from '@/lib/auth';
+import { Link } from 'react-router-dom';
+import { ChevronLeft } from 'lucide-react';
+
+import { UserNavigation } from '@/components/ui/UserNavigation';
+import { useGetUser } from '@/features/auth';
 
 export const Profile = () => {
-  const user = useUser();
+  const user = useGetUser();
 
-  if (!user.data) {
+  if (!user.isSuccess) {
     return null;
   }
 
   return (
-    <div>
-      <h2>TODO: Profile</h2>
-    </div>
+    <>
+      <header className="fixed top-0 left-0 w-screen h-16 p-4">
+        <div className="h-full flex items-center justify-between ">
+          <Link to="/users/me/notes" className="text-primary flex items-center">
+            <ChevronLeft className="w-7 h-7 -ml-2" />
+            Notes
+          </Link>
+          <UserNavigation />
+        </div>
+      </header>
+      <div className="mt-16 md:w-5/12 mx-auto">TODO: Profile</div>
+    </>
   );
 };

@@ -1,4 +1,4 @@
-import { useLogin } from '@/lib/auth';
+import { useLogin } from '../hooks/useLogin';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -37,7 +37,7 @@ export const LoginForm = ({ onSuccess }: LoginFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    login.mutate(values, { onSuccess: onSuccess });
+    login.mutate(values, { onSuccess });
   };
 
   return (

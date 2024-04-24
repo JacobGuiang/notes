@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 describe('Auth', () => {
   describe('Register', () => {
     beforeEach(() => {
-      cy.visit('/auth/register');
+      cy.visit('/#/auth/register');
     });
 
     it('should register user if data is ok', () => {
@@ -113,7 +113,7 @@ describe('Auth', () => {
       cy.get('input[name=password]').type(`${newUser.password}{enter}`);
 
       // log out
-      cy.get('header > svg').click();
+      cy.get('button[aria-label="Open user navigation"]').click();
       cy.contains('Sign out').click();
 
       cy.url().should('not.include', '/users/me/notes');

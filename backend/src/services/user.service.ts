@@ -24,6 +24,16 @@ const createUser = async (user: NewUser) => {
     .executeTakeFirstOrThrow();
 };
 
+const getUserById = async (userId: number) => {
+  return db
+    .selectFrom('user')
+    .select(['id', 'username'])
+    .where('id', '=', userId)
+    .executeTakeFirstOrThrow(() => {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'User not found');
+    });
+};
+
 const updateUserById = async (userId: number, userUpdate: UserUpdate) => {
   if (userUpdate.username) {
     userUpdate.username = userUpdate.username.toLowerCase();
@@ -60,6 +70,7 @@ const deleteUserById = (userId: number) => {
 
 export default {
   createUser,
+  getUserById,
   updateUserById,
   deleteUserById,
 };

@@ -1,6 +1,8 @@
 import dotenv from 'dotenv';
 import path from 'path';
 import { z } from 'zod';
+import { CookieOptions } from 'express';
+import { CorsOptions } from 'cors';
 
 dotenv.config({ path: path.join(__dirname, '../../.env') });
 
@@ -30,6 +32,16 @@ if (!result.success) {
 }
 
 const envVars = result.data;
+const cookieOptions: CookieOptions = {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'none',
+  signed: true,
+};
+const corsOptions: CorsOptions = {
+  origin: ['https://jacobguiang.github.io'],
+  credentials: true,
+};
 
 export default {
   env: envVars.NODE_ENV,
@@ -42,4 +54,6 @@ export default {
   },
   cookieSecret: envVars.COOKIE_SECRET,
   jwtSecret: envVars.JWT_SECRET,
+  cookieOptions,
+  corsOptions,
 };

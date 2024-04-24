@@ -21,12 +21,12 @@ const login = catchAsync(async (req: Request, res: Response) => {
       expiresIn: '1h',
     }
   );
-  res.cookie('token', token, { httpOnly: true, signed: true, secure: true });
+  res.cookie('token', token, config.cookieOptions);
   res.send(user);
 });
 
 const logout = catchAsync(async (_req: Request, res: Response) => {
-  res.clearCookie('token');
+  res.clearCookie('token', { ...config.cookieOptions, signed: false });
   res.status(StatusCodes.NO_CONTENT).send();
 });
 

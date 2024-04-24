@@ -1,4 +1,4 @@
-import { useRegister } from '@/lib/auth';
+import { useRegister } from '../hooks/useRegister';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -57,7 +57,7 @@ export const RegisterForm = ({ onSuccess }: RegisterFormProps) => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    register.mutate(values, { onSuccess: onSuccess });
+    register.mutate(values, { onSuccess });
   };
 
   return (

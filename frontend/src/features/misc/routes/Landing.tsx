@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
-import { useUser } from '@/lib/auth';
 import { LoginForm } from '@/features/auth/components/LoginForm';
 import { Link } from 'react-router-dom';
 import { AuthLayout } from '@/components/Layout';
-import { useEffect } from 'react';
+import { useGetUser } from '@/features/auth';
 
 export const Landing = () => {
   const navigate = useNavigate();
-  const user = useUser();
+  const user = useGetUser({ throwOnUnauthorized: false });
 
   useEffect(() => {
     if (user.data) {

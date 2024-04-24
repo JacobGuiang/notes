@@ -1,13 +1,8 @@
 import { Outlet, Navigate } from 'react-router-dom';
 
 import { MainLayout } from '@/components/Layout';
-import { lazyImport } from '@/utils/lazyImport';
-
-const { NotesRoutes } = lazyImport(
-  () => import('@/features/notes'),
-  'NotesRoutes'
-);
-const { Profile } = lazyImport(() => import('@/features/users'), 'Profile');
+import { NotesRoutes } from '@/features/notes';
+import { Profile } from '@/features/users';
 
 // eslint-disable-next-line react-refresh/only-export-components
 const App = () => {
@@ -23,8 +18,8 @@ export const protectedRoutes = [
     path: '/users/me/',
     element: <App />,
     children: [
+      { index: true, element: <Profile /> },
       { path: 'notes/*', element: <NotesRoutes /> },
-      { path: '', element: <Profile /> },
       { path: '*', element: <Navigate to="." /> },
     ],
   },

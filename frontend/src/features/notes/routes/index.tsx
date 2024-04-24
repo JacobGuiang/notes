@@ -6,7 +6,7 @@ import { Notes } from './Notes';
 export const NotesRoutes = () => {
   return (
     <Routes>
-      <Route path="" element={<Notes />} />
+      <Route index element={<Notes />} />
       <Route path=":noteId" element={<Note />} />
       <Route path="*" element={<Navigate to="." />} />
     </Routes>

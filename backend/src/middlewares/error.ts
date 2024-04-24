@@ -14,8 +14,11 @@ const errorConverter: ErrorRequestHandler = (err, _req, res, next) => {
     error = new ApiError(statusCode, message, false, err.stack);
   }
 
-  if (error.statusCode === StatusCodes.UNAUTHORIZED) {
-    res.clearCookie('token');
+  if (
+    error.statusCode === StatusCodes.UNAUTHORIZED ||
+    error.message === 'User not found'
+  ) {
+    res.clearCookie('token', { ...config.cookieOptions, signed: false });
   }
 
   next(error);

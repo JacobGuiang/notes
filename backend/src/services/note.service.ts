@@ -22,12 +22,14 @@ const getNotesByUserId = async (userId: number) => {
 };
 
 const getNoteByNoteIdAndUserId = async (noteId: number, userId: number) => {
-  return db
+  return await db
     .selectFrom('note')
     .selectAll()
     .where('id', '=', noteId)
     .where('user_id', '=', userId)
-    .executeTakeFirst();
+    .executeTakeFirstOrThrow(() => {
+      throw new ApiError(StatusCodes.NOT_FOUND, 'Note not found');
+    });
 };
 
 const updateNoteByNoteIdAndUserId = async (

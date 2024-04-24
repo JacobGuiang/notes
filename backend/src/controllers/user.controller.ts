@@ -8,9 +8,10 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   res.status(StatusCodes.CREATED).send(user);
 });
 
-const getUser = (req: Request, res: Response) => {
-  res.send(req.user);
-};
+const getUser = catchAsync(async (req: Request, res: Response) => {
+  const user = await userService.getUserById(req.user!.id);
+  res.send(user);
+});
 
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const user = await userService.updateUserById(req.user!.id, req.body);
