@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 
 import {
   CredentialsDTO,
@@ -12,6 +13,16 @@ export const useUser = () => {
   return useQuery({
     queryKey: ['user'],
     queryFn: getUser,
+    throwOnError: (error) => {
+      if (isAxiosError(error) && error.response?.status === 401) {
+        if (error.response.data.message === 'Token expired') {
+          window.location.assign(window.location.origin);
+        }
+        // don't use error boundary if API reponse was 401
+        return false;
+      }
+      return true;
+    },
   });
 };
 
