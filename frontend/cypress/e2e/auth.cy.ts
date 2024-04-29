@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 describe('Auth', () => {
   describe('Register', () => {
     beforeEach(() => {
-      cy.visit('/#/auth/register');
+      cy.visit('/auth/register');
     });
 
     it('should register user if data is ok', () => {

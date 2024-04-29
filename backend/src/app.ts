@@ -2,7 +2,6 @@ import config from './config/config';
 import express from 'express';
 import pino from 'pino-http';
 import helmet from 'helmet';
-import cors from 'cors';
 import compression from 'compression';
 import rateLimiter from './middlewares/rateLimiter';
 import { errorConverter, errorHandler } from './middlewares/error';
@@ -34,10 +33,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // gzip compression
 app.use(compression());
-
-// enable cors
-app.use(cors(config.corsOptions));
-app.options('*', cors(config.corsOptions));
 
 app.use(cookieParser(config.cookieSecret));
 

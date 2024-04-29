@@ -17,7 +17,6 @@ export default defineConfig({
   preview: {
     port: 3000,
   },
-  base: '/notes-app/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),

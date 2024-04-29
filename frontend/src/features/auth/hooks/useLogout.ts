@@ -10,7 +10,7 @@ export const useLogout = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       queryClient.setQueryData(['user'], undefined);
-      window.location.assign(`${window.location.origin}/notes-app/`);
+      window.location.assign(window.location.origin);
     },
   });
 };

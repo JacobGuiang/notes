@@ -1,0 +1,11 @@
+cypress
+node_modules
+.dockerignore
+.eslintignore
+.eslintrc.cjs
+.gitignore
+.prettierignore
+.prettierrc
+components.json
+cypress.config.ts
+Dockerfile

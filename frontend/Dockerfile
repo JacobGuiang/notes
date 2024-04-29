@@ -4,9 +4,9 @@
 ARG NODE_VERSION=20.12.2
 FROM node:${NODE_VERSION}-slim as base
 
-LABEL fly_launch_runtime="Node.js"
+LABEL fly_launch_runtime="Vite"
 
-# Node.js app lives here
+# Vite app lives here
 WORKDIR /app
 
 # Set production environment
@@ -35,11 +35,14 @@ RUN npm prune --omit=dev
 
 
 # Final stage for app image
-FROM base
+FROM nginx
 
 # Copy built application
-COPY --from=build /app /app
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Copy NGINX configuration
+COPY --from=build /app/nginx.conf /etc/nginx/nginx.conf
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 8080
-CMD [ "npm", "run", "start" ]
+EXPOSE 80
+CMD [ "/usr/sbin/nginx", "-g", "daemon off;" ]
