@@ -2,15 +2,15 @@ import { Loader2 } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
 
-interface LoaderFallbackProps {
+interface LoaderProps {
   className?: string;
 }
 
-export const LoaderFallback = ({ className }: LoaderFallbackProps) => {
+export const Loader = ({ className }: LoaderProps) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-center w-full h-full',
+        'fixed top-0 left-0 flex items-center justify-center h-screen w-screen',
         className
       )}
     >

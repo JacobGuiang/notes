@@ -14,7 +14,7 @@ export const Profile = () => {
   return (
     <>
       <header className="fixed top-0 left-0 w-screen h-16 p-4">
-        <div className="h-full flex items-center justify-between ">
+        <div className="md:w-5/12 h-full mx-auto flex items-center justify-between ">
           <Link to="/users/me/notes" className="text-primary flex items-center">
             <ChevronLeft className="w-7 h-7 -ml-2" />
             Notes
@@ -22,7 +22,7 @@ export const Profile = () => {
           <UserNavigation />
         </div>
       </header>
-      <div className="mt-16 md:w-5/12 mx-auto">TODO: Profile</div>
+      <div className="mt-16">TODO: Profile</div>
     </>
   );
 };

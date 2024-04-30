@@ -9,7 +9,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { queryClient } from '@/lib/reactQuery';
 import { Button } from '@/components/ui/button';
-import { LoaderFallback } from '@/components/ui/LoaderFallback';
+import { Loader } from '@/components/ui/Loader';
 
 const ErrorFallback: React.ComponentType<FallbackProps> = ({
   resetErrorBoundary,
@@ -37,9 +37,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <QueryErrorResetBoundary>
         {({ reset }) => (
           <ErrorBoundary onReset={reset} FallbackComponent={ErrorFallback}>
-            <React.Suspense
-              fallback={<LoaderFallback className="w-screen h-screen" />}
-            >
+            <React.Suspense fallback={<Loader />}>
               {/* <Notifications /> */}
               <Router basename="/">{children}</Router>
               <ReactQueryDevtools
