@@ -5,7 +5,7 @@ import { isAxiosError } from 'axios';
 
 export const useGetNote = (id: number) => {
   return useQuery({
-    queryKey: ['notes', { id }],
+    queryKey: ['notes', id],
     queryFn: () => getNote(id),
     throwOnError: (error) => {
       if (isAxiosError(error) && error.response?.status == 404) {

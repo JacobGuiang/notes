@@ -4,7 +4,6 @@ import { SquarePen } from 'lucide-react';
 import { useCreateNote } from '../hooks/useCreateNote';
 
 interface CreateNoteButtonProps {
-  content?: string;
   className?: string;
 }
 

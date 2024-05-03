@@ -23,8 +23,8 @@ export const Notes = () => {
           <UserNavigation className="ml-auto" />
         </div>
       </header>
-      {notes.isPending && <Loader />}
-      {notes.isSuccess && (
+      {(notes.isPending || notes.isFetching) && <Loader />}
+      {!notes.isFetching && notes.isSuccess && (
         <div className="h-screen py-16">
           <h1 className="text-3xl font-bold">Notes</h1>
           <div className="grid">
