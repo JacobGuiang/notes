@@ -23,13 +23,6 @@ module.exports = {
       fontFamily: {
         sans: ['"Noto Sans"', ...defaultTheme.fontFamily.sans],
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            color: 'hsl(var(--foreground))',
-          },
-        },
-      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -84,6 +77,28 @@ module.exports = {
       //   'accordion-down': 'accordion-down 0.2s ease-out',
       //   'accordion-up': 'accordion-up 0.2s ease-out',
       // },
+      typography: (theme) => ({
+        editor: {
+          css: {
+            '--tw-prose-body': theme('colors.foreground'),
+            '--tw-prose-headings': theme('colors.foreground'),
+            '--tw-prose-lead': theme('colors.foreground'),
+            '--tw-prose-links': theme('colors.foreground'),
+            '--tw-prose-bold': theme('colors.foreground'),
+            '--tw-prose-counters': theme('colors.foreground'),
+            '--tw-prose-bullets': theme('colors.foreground'),
+            '--tw-prose-hr': theme('colors.foreground'),
+            '--tw-prose-quotes': theme('colors.foreground'),
+            '--tw-prose-quote-borders': theme('colors.foreground'),
+            '--tw-prose-captions': theme('colors.foreground'),
+            '--tw-prose-code': theme('colors.foreground'),
+            '--tw-prose-pre-code': theme('colors.foreground'),
+            '--tw-prose-pre-bg': theme('colors.foreground'),
+            '--tw-prose-th-borders': theme('colors.foreground'),
+            '--tw-prose-td-borders': theme('colors.foreground'),
+          },
+        },
+      }),
     },
   },
   plugins: [require('@tailwindcss/typography'), require('tailwindcss-animate')],

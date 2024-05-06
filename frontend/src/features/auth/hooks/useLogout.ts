@@ -8,8 +8,7 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      queryClient.setQueryData(['user'], undefined);
+      queryClient.invalidateQueries();
       window.location.assign(window.location.origin);
     },
   });

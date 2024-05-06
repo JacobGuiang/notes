@@ -8,6 +8,18 @@ import { UserNavigation } from '@/components/ui/UserNavigation';
 import { getNotes } from '../api/getNotes';
 import { CreateNoteButton } from '../components/CreateNoteButton';
 
+const getTitleAndPreview = (content: string) => {
+  const dom = new DOMParser().parseFromString(content, 'text/html');
+  const textContent = [...dom.body.children]
+    .filter((element) => element.textContent)
+    .map((element) => element.textContent);
+
+  return {
+    title: textContent[0] || 'New Note',
+    preview: textContent[1] || 'No additional text',
+  };
+};
+
 export const Notes = () => {
   const user = useGetUser();
   const notes = useQuery({ queryKey: ['notes'], queryFn: getNotes });
@@ -18,26 +30,48 @@ export const Notes = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 w-screen h-16 p-4 backdrop-blur-md">
-        <div className="md:w-5/12 h-full mx-auto flex items-center">
+      <header className="fixed top-0 left-0 w-screen h-16 backdrop-blur-md">
+        <div className="md:w-5/12 h-full mx-auto p-4 flex items-center">
           <UserNavigation className="ml-auto" />
         </div>
       </header>
       {(notes.isPending || notes.isFetching) && <Loader />}
       {!notes.isFetching && notes.isSuccess && (
-        <div className="h-screen py-16">
-          <h1 className="text-3xl font-bold">Notes</h1>
-          <div className="grid">
-            {notes.data.map((note) => (
-              <Link to={`/users/me/notes/${note.id}`} key={note.id}>
-                {note.id}
-              </Link>
-            ))}
+        <div className="min-h-screen py-16">
+          <h1 className="text-3xl font-bold mb-4">Notes</h1>
+          <div className="rounded-lg bg-secondary">
+            {notes.data.map((note, index, array) => {
+              const { title, preview } = getTitleAndPreview(note.content);
+
+              return (
+                <div
+                  className={
+                    index !== array.length - 1
+                      ? 'border-b-[1px] border-b-accent'
+                      : ''
+                  }
+                >
+                  <Link to={`/users/me/notes/${note.id}`} key={note.id}>
+                    <div className="py-2 px-6">
+                      <h2 className="font-bold">{title}</h2>
+                      <p className="text-muted-foreground overflow-x-hidden overflow-ellipsis whitespace-nowrap">
+                        <span>
+                          {new Intl.DateTimeFormat('en-US', {
+                            dateStyle: 'short',
+                          }).format(new Date(note.updated_at))}
+                        </span>{' '}
+                        {preview}
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
-      <footer className="fixed bottom-0 left-0 w-screen h-16 p-4 backdrop-blur-md">
-        <div className="md:w-5/12 h-full mx-auto grid grid-cols-3 items-center">
+      <footer className="fixed bottom-0 left-0 w-screen h-16 backdrop-blur-md">
+        <div className="md:w-5/12 h-full mx-auto p-4 grid grid-cols-3 items-center">
           <div className="text-sm text-center col-start-2">
             {notes.data?.length} {notes.data?.length === 1 ? 'Note' : 'Notes'}
           </div>
