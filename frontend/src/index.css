@@ -35,3 +35,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .editor-button {
+    @apply p-2 rounded-lg;
+  }
+
+  .editor-button-active {
+    @apply editor-button bg-primary;
+  }
+}

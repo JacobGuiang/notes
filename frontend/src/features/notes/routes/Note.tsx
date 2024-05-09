@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { ChevronLeft, Undo2, Redo2 } from 'lucide-react';
-import { isAxiosError } from 'axios';
 import {
-  Editor,
-  EditorContent,
-  useEditor,
-  FloatingMenu,
-  BubbleMenu,
-} from '@tiptap/react';
+  ChevronLeft,
+  Undo2,
+  Redo2,
+  List,
+  ListOrdered,
+  IndentDecrease,
+  IndentIncrease,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+} from 'lucide-react';
+import { isAxiosError } from 'axios';
+import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
 import { Loader } from '@/components/ui/Loader';
@@ -17,13 +23,6 @@ import { useGetUser } from '@/features/auth';
 
 import { useGetNote } from '../hooks/useGetNote';
 import { useUpdateNote } from '../hooks/useUpdateNote';
-import {
-  TitleButton,
-  HeadingButton,
-  SubHeadingButton,
-  BulletListButton,
-  OrderedListButton,
-} from '../components';
 
 interface HeaderProps {
   editor: Editor;
@@ -34,30 +33,28 @@ interface HeaderProps {
 
 const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
   return (
-    <header className="fixed top-0 left-0 w-screen z-50 bg-background">
-      <div className="md:w-5/12 h-full mx-auto p-4 grid gap-4">
+    <header className="fixed top-0 left-0 w-screen h-32 z-50 bg-background">
+      <div className="md:w-5/12 h-full mx-auto p-4">
         <div className="flex items-center justify-between text-primary">
           <Link to="/users/me/notes" className="flex items-center">
             <ChevronLeft className="w-7 h-7 -ml-2" />
             Notes
           </Link>
           <div className="flex gap-4">
-            <>
-              <button
-                onClick={() => editor.chain().focus().undo().run()}
-                disabled={!editor.can().chain().focus().undo().run()}
-                className={!editor.can().undo() ? 'brightness-50' : ''}
-              >
-                <Undo2 className="h-7 w-7" />
-              </button>
-              <button
-                onClick={() => editor.chain().focus().redo().run()}
-                disabled={!editor.can().chain().focus().redo().run()}
-                className={!editor.can().redo() ? 'brightness-50' : ''}
-              >
-                <Redo2 className="h-7 w-7" />
-              </button>
-            </>
+            <button
+              onClick={() => editor.chain().focus().undo().run()}
+              disabled={!editor.can().chain().focus().undo().run()}
+              className={!editor.can().undo() ? 'brightness-50' : ''}
+            >
+              <Undo2 className="h-7 w-7" />
+            </button>
+            <button
+              onClick={() => editor.chain().focus().redo().run()}
+              disabled={!editor.can().chain().focus().redo().run()}
+              className={!editor.can().redo() ? 'brightness-50' : ''}
+            >
+              <Redo2 className="h-7 w-7" />
+            </button>
             <UserNavigation />
             {showDone && (
               <button
@@ -72,16 +69,121 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             )}
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="flex align-center gap-4">
-            <TitleButton editor={editor} />
-            <HeadingButton editor={editor} />
-            <SubHeadingButton editor={editor} />
-          </div>
-          <div className="flex align-center gap-4">
-            <BulletListButton editor={editor} />
-            <OrderedListButton editor={editor} />
-          </div>
+        <div className="flex justify-center">
+          <button
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 1 }).run()
+            }
+            className={
+              editor.isActive('heading', { level: 1 })
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            Title
+          </button>
+          <button
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            }
+            className={
+              editor.isActive('heading', { level: 2 })
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            Heading
+          </button>
+          <button
+            onClick={() =>
+              editor.chain().focus().toggleHeading({ level: 3 }).run()
+            }
+            className={
+              editor.isActive('heading', { level: 3 })
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            Subheading
+          </button>
+        </div>
+        <div className="flex justify-center">
+          <button
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            className={
+              editor.isActive('bold') ? 'editor-button-active' : 'editor-button'
+            }
+          >
+            <Bold />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            className={
+              editor.isActive('italic')
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            <Italic />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            className={
+              editor.isActive('underline')
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            <Underline />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            className={
+              editor.isActive('strike')
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            <Strikethrough />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={
+              editor.isActive('bulletList')
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            <List />
+          </button>
+          <button
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={
+              editor.isActive('orderedList')
+                ? 'editor-button-active'
+                : 'editor-button'
+            }
+          >
+            <ListOrdered />
+          </button>
+          <button
+            onClick={() =>
+              editor.chain().focus().liftListItem('listItem').run()
+            }
+            disabled={!editor.can().liftListItem('listItem')}
+            className="editor-button"
+          >
+            <IndentDecrease />
+          </button>
+          <button
+            onClick={() =>
+              editor.chain().focus().sinkListItem('listItem').run()
+            }
+            disabled={!editor.can().sinkListItem('listItem')}
+            className="editor-button"
+          >
+            <IndentIncrease />
+          </button>
         </div>
       </div>
     </header>
@@ -124,7 +226,7 @@ export const Note = () => {
       editorProps: {
         attributes: {
           class:
-            'min-h-screen py-16 prose prose-editor prose-base focus:outline-none caret-primary',
+            'min-h-screen py-32 prose prose-editor prose-base focus:outline-none caret-primary',
         },
       },
       autofocus: 'start',
