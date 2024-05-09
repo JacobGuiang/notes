@@ -34,7 +34,7 @@ interface HeaderProps {
 const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
   return (
     <header className="fixed top-0 left-0 w-screen h-32 z-50 bg-background">
-      <div className="md:w-5/12 h-full mx-auto p-4">
+      <div className="lg:w-1/2 h-full mx-auto p-4">
         <div className="flex items-center justify-between text-primary">
           <Link to="/users/me/notes" className="flex items-center">
             <ChevronLeft className="w-7 h-7 -ml-2" />
@@ -45,6 +45,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
               onClick={() => editor.chain().focus().undo().run()}
               disabled={!editor.can().chain().focus().undo().run()}
               className={!editor.can().undo() ? 'brightness-50' : ''}
+              aria-label="Undo"
             >
               <Undo2 className="h-7 w-7" />
             </button>
@@ -52,6 +53,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
               onClick={() => editor.chain().focus().redo().run()}
               disabled={!editor.can().chain().focus().redo().run()}
               className={!editor.can().redo() ? 'brightness-50' : ''}
+              aria-label="Redo"
             >
               <Redo2 className="h-7 w-7" />
             </button>
@@ -63,6 +65,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
                   setShowDone(false);
                 }}
                 className="font-bold"
+                aria-label="Done"
               >
                 Done
               </button>
@@ -113,6 +116,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             className={
               editor.isActive('bold') ? 'editor-button-active' : 'editor-button'
             }
+            aria-label="Bold"
           >
             <Bold />
           </button>
@@ -123,6 +127,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
                 ? 'editor-button-active'
                 : 'editor-button'
             }
+            aria-label="Bold"
           >
             <Italic />
           </button>
@@ -133,6 +138,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
                 ? 'editor-button-active'
                 : 'editor-button'
             }
+            aria-label="Underline"
           >
             <Underline />
           </button>
@@ -143,6 +149,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
                 ? 'editor-button-active'
                 : 'editor-button'
             }
+            aria-label="Strike"
           >
             <Strikethrough />
           </button>
@@ -153,6 +160,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
                 ? 'editor-button-active'
                 : 'editor-button'
             }
+            aria-label="Bulleted list"
           >
             <List />
           </button>
@@ -163,6 +171,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
                 ? 'editor-button-active'
                 : 'editor-button'
             }
+            aria-label="Numbered list"
           >
             <ListOrdered />
           </button>
@@ -172,6 +181,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             disabled={!editor.can().liftListItem('listItem')}
             className="editor-button"
+            aria-label="Decrease indent"
           >
             <IndentDecrease />
           </button>
@@ -181,6 +191,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             disabled={!editor.can().sinkListItem('listItem')}
             className="editor-button"
+            aria-label="Increase indent"
           >
             <IndentIncrease />
           </button>

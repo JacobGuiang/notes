@@ -14,7 +14,7 @@ export const Profile = () => {
   return (
     <>
       <header className="fixed top-0 left-0 w-screen h-16">
-        <div className="md:w-5/12 h-full mx-auto p-4 flex items-center justify-between">
+        <div className="lg:w-1/2 h-full mx-auto p-4 flex items-center justify-between">
           <Link to="/users/me/notes" className="text-primary flex items-center">
             <ChevronLeft className="w-7 h-7 -ml-2" />
             Notes

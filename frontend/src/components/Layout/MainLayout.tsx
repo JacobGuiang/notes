@@ -3,5 +3,5 @@ interface MainLayoutProps {
 }
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
-  return <div className="md:w-5/12 mx-auto px-4 text-base">{children}</div>;
+  return <div className="lg:w-1/2 mx-auto px-4 text-base">{children}</div>;
 };

@@ -31,7 +31,7 @@ export const Notes = () => {
   return (
     <>
       <header className="fixed top-0 left-0 w-screen h-16 backdrop-blur-md">
-        <div className="md:w-5/12 h-full mx-auto p-4 flex items-center">
+        <div className="lg:w-1/2 h-full mx-auto p-4 flex items-center">
           <UserNavigation className="ml-auto" />
         </div>
       </header>
@@ -71,7 +71,7 @@ export const Notes = () => {
         </div>
       )}
       <footer className="fixed bottom-0 left-0 w-screen h-16 backdrop-blur-md">
-        <div className="md:w-5/12 h-full mx-auto p-4 grid grid-cols-3 items-center">
+        <div className="lg:w-1/2 h-full mx-auto p-4 grid grid-cols-3 items-center">
           <div className="text-sm text-center col-start-2">
             {notes.data?.length} {notes.data?.length === 1 ? 'Note' : 'Notes'}
           </div>
