@@ -7,6 +7,7 @@ import { UserNavigation } from '@/components/ui/UserNavigation';
 
 import { getNotes } from '../api/getNotes';
 import { CreateNoteButton } from '../components/CreateNoteButton';
+import { NoteDropdown } from '../components/NoteDropdown';
 
 const getTitleAndPreview = (content: string) => {
   const dom = new DOMParser().parseFromString(content, 'text/html');
@@ -50,10 +51,16 @@ export const Notes = () => {
                       ? 'border-b-[1px] border-b-accent'
                       : ''
                   }
+                  key={note.id}
                 >
-                  <Link to={`/users/me/notes/${note.id}`} key={note.id}>
+                  <Link to={`/users/me/notes/${note.id}`}>
                     <div className="py-2 px-6">
-                      <h2 className="font-bold">{title}</h2>
+                      <div className="flex justify-between">
+                        <h2 className="font-bold overflow-x-hidden overflow-ellipsis whitespace-nowrap mr-4">
+                          {title}
+                        </h2>
+                        <NoteDropdown className="flex-shrink-0" id={note.id} />
+                      </div>
                       <p className="text-muted-foreground overflow-x-hidden overflow-ellipsis whitespace-nowrap">
                         <span>
                           {new Intl.DateTimeFormat('en-US', {

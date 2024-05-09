@@ -13,5 +13,6 @@ export const useGetNote = (id: number) => {
       }
       return true;
     },
+    refetchOnWindowFocus: false,
   });
 };

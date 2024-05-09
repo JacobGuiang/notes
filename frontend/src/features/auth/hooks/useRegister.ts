@@ -7,10 +7,9 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: (credentials: CredentialsDTO) => register(credentials),
-    onSuccess: async (user, credentials) => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
+    onSuccess: async (_user, credentials) => {
       await login(credentials);
-      queryClient.setQueryData(['user'], user);
+      queryClient.invalidateQueries();
     },
   });
 };

@@ -237,7 +237,7 @@ export const Note = () => {
       editorProps: {
         attributes: {
           class:
-            'min-h-screen py-32 prose prose-editor prose-base focus:outline-none caret-primary',
+            'min-h-screen max-w-none py-32 prose prose-editor focus:outline-none caret-primary',
         },
       },
       autofocus: 'start',
