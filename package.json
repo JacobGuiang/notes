@@ -8,7 +8,8 @@
     "lint": "concurrently \"npm run lint --prefix frontend\" \"npm run lint --prefix backend\"",
     "test": "concurrently \"npm test --prefix frontend\" \"npm test --prefix backend\"",
     "build:test": "concurrently \"npm run build:test --prefix frontend\" \"npm run build --prefix backend\"",
-    "prettier:check": "concurrently \"npm run prettier:check --prefix frontend\" \"npm run prettier:check --prefix backend\""
+    "prettier:check": "concurrently \"npm run prettier:check --prefix frontend\" \"npm run prettier:check --prefix backend\"",
+    "prettier:write": "concurrently \"npm run prettier:write --prefix frontend\" \"npm run prettier:write --prefix backend\""
   },
   "dependencies": {
     "concurrently": "^8.2.2"
