@@ -9,7 +9,7 @@ export const useRegister = () => {
     mutationFn: (credentials: CredentialsDTO) => register(credentials),
     onSuccess: async (_user, credentials) => {
       await login(credentials);
-      queryClient.invalidateQueries();
+      return queryClient.invalidateQueries();
     },
   });
 };

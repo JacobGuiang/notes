@@ -8,8 +8,9 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logout,
     onSuccess: () => {
-      queryClient.invalidateQueries();
+      const promise = queryClient.invalidateQueries();
       window.location.assign(window.location.origin);
+      return promise;
     },
   });
 };

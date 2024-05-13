@@ -21,23 +21,50 @@ import Underline from '@tiptap/extension-underline';
 import { Loader } from '@/components/ui/Loader';
 import { UserNavigation } from '@/components/ui/UserNavigation';
 import { useGetUser } from '@/features/auth';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import { buttonVariants } from '@/components/ui/button';
 
 import { useGetNote } from '../hooks/useGetNote';
 import { useUpdateNote } from '../hooks/useUpdateNote';
 
 interface HeaderProps {
   editor: Editor;
-  updateNote: () => void;
-  showDone: boolean;
-  setShowDone: (boolean: boolean) => void;
+  saveNote: () => void;
+  showSave: boolean;
+  setShowSave: (boolean: boolean) => void;
+  setShowSaveDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
+const Header = ({
+  editor,
+  saveNote,
+  showSave,
+  setShowSave,
+  setShowSaveDialog,
+}: HeaderProps) => {
   return (
     <header className="fixed top-0 left-0 w-screen h-32 z-50 bg-background">
       <div className="lg:w-1/2 h-full mx-auto p-4">
         <div className="flex items-center justify-between text-primary">
-          <Link to="/users/me/notes" className="flex items-center">
+          <Link
+            to="/users/me/notes"
+            className="flex items-center"
+            onClick={(event) => {
+              if (showSave) {
+                event.preventDefault();
+                setShowSaveDialog(true);
+              }
+            }}
+          >
             <ChevronLeft className="w-7 h-7 -ml-2" />
             Notes
           </Link>
@@ -59,16 +86,16 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
               <Redo2Icon className="h-7 w-7" />
             </button>
             <UserNavigation />
-            {showDone && (
+            {showSave && (
               <button
                 onClick={() => {
-                  updateNote();
-                  setShowDone(false);
+                  saveNote();
+                  setShowSave(false);
                 }}
                 className="font-bold"
-                aria-label="Done"
+                aria-label="Save"
               >
-                Done
+                Save
               </button>
             )}
           </div>
@@ -202,6 +229,45 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
   );
 };
 
+interface SaveDialogProps {
+  showSaveDialog: boolean;
+  setShowSaveDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  handleDontSave: () => void;
+  handleSave: () => void;
+}
+
+const SaveDialog = ({
+  showSaveDialog,
+  setShowSaveDialog,
+  handleDontSave,
+  handleSave,
+}: SaveDialogProps) => {
+  return (
+    <AlertDialog open={showSaveDialog} onOpenChange={setShowSaveDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Do you want to save the changes you made?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Your changes will be lost if you don't save them.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className={buttonVariants({ variant: 'destructive' })}
+            onClick={handleDontSave}
+          >
+            Don't Save
+          </AlertDialogAction>
+          <AlertDialogAction onClick={handleSave}>Save</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
 export const Note = () => {
   const user = useGetUser();
 
@@ -222,7 +288,7 @@ export const Note = () => {
     }
   });
 
-  const [showDone, setShowDone] = useState(false);
+  const [showSave, setShowSave] = useState(false);
 
   const extensions = [StarterKit, Underline];
 
@@ -231,8 +297,8 @@ export const Note = () => {
       extensions,
       content: note.data?.content,
       onUpdate: () => {
-        if (!showDone) {
-          setShowDone(true);
+        if (!showSave) {
+          setShowSave(true);
         }
       },
       editorProps: {
@@ -246,6 +312,8 @@ export const Note = () => {
     [note.data?.content]
   );
 
+  const [showSaveDialog, setShowSaveDialog] = useState(false);
+
   if (!user.isSuccess || note.isError) {
     return null;
   }
@@ -254,21 +322,34 @@ export const Note = () => {
     return <Loader />;
   }
 
+  const noteUpdate = {
+    id: noteId,
+    // check isEmpty to prevent saving content as '<p></p>'
+    content: editor.isEmpty ? '' : editor.getHTML(),
+  };
+
   return (
     <>
       <Header
-        editor={editor}
-        updateNote={() =>
-          updateNote.mutate({
-            id: noteId,
-            // check isEmpty to prevent saving content as '<p></p>'
-            content: editor.isEmpty ? '' : editor.getHTML(),
-          })
-        }
-        showDone={showDone}
-        setShowDone={setShowDone}
+        {...{
+          editor,
+          showSave,
+          setShowSave,
+          setShowSaveDialog,
+          saveNote: () => updateNote.mutate(noteUpdate),
+        }}
       />
       <EditorContent editor={editor} />
+      <SaveDialog
+        showSaveDialog={showSaveDialog}
+        setShowSaveDialog={setShowSaveDialog}
+        handleDontSave={() => navigate('/users/me/notes')}
+        handleSave={() => {
+          updateNote.mutate(noteUpdate, {
+            onSuccess: () => navigate('/users/me/notes'),
+          });
+        }}
+      />
     </>
   );
 };

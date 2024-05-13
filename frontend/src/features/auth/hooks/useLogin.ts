@@ -7,8 +7,6 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: (credentials: CredentialsDTO) => login(credentials),
-    onSuccess: () => {
-      queryClient.invalidateQueries();
-    },
+    onSuccess: () => queryClient.invalidateQueries(),
   });
 };
