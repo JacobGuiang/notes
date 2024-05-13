@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ChevronLeft,
-  Undo2,
-  Redo2,
-  List,
-  ListOrdered,
-  IndentDecrease,
-  IndentIncrease,
-  Bold,
-  Italic,
-  Underline,
-  Strikethrough,
+  Undo2Icon,
+  Redo2Icon,
+  ListIcon,
+  ListOrderedIcon,
+  IndentDecreaseIcon,
+  IndentIncreaseIcon,
+  BoldIcon,
+  ItalicIcon,
+  StrikethroughIcon,
+  UnderlineIcon,
 } from 'lucide-react';
 import { isAxiosError } from 'axios';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
 
 import { Loader } from '@/components/ui/Loader';
 import { UserNavigation } from '@/components/ui/UserNavigation';
@@ -47,7 +48,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
               className={!editor.can().undo() ? 'brightness-50' : ''}
               aria-label="Undo"
             >
-              <Undo2 className="h-7 w-7" />
+              <Undo2Icon className="h-7 w-7" />
             </button>
             <button
               onClick={() => editor.chain().focus().redo().run()}
@@ -55,7 +56,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
               className={!editor.can().redo() ? 'brightness-50' : ''}
               aria-label="Redo"
             >
-              <Redo2 className="h-7 w-7" />
+              <Redo2Icon className="h-7 w-7" />
             </button>
             <UserNavigation />
             {showDone && (
@@ -118,7 +119,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             aria-label="Bold"
           >
-            <Bold />
+            <BoldIcon />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -129,7 +130,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             aria-label="Bold"
           >
-            <Italic />
+            <ItalicIcon />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -140,7 +141,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             aria-label="Underline"
           >
-            <Underline />
+            <UnderlineIcon />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -151,7 +152,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             aria-label="Strike"
           >
-            <Strikethrough />
+            <StrikethroughIcon />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -162,7 +163,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             aria-label="Bulleted list"
           >
-            <List />
+            <ListIcon />
           </button>
           <button
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
@@ -173,7 +174,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             }
             aria-label="Numbered list"
           >
-            <ListOrdered />
+            <ListOrderedIcon />
           </button>
           <button
             onClick={() =>
@@ -183,7 +184,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             className="editor-button"
             aria-label="Decrease indent"
           >
-            <IndentDecrease />
+            <IndentDecreaseIcon />
           </button>
           <button
             onClick={() =>
@@ -193,7 +194,7 @@ const Header = ({ editor, updateNote, showDone, setShowDone }: HeaderProps) => {
             className="editor-button"
             aria-label="Increase indent"
           >
-            <IndentIncrease />
+            <IndentIncreaseIcon />
           </button>
         </div>
       </div>
@@ -223,7 +224,7 @@ export const Note = () => {
 
   const [showDone, setShowDone] = useState(false);
 
-  const extensions = [StarterKit];
+  const extensions = [StarterKit, Underline];
 
   const editor = useEditor(
     {
